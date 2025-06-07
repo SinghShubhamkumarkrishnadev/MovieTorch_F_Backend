@@ -260,4 +260,63 @@ public class TMDBService {
 				)
 		);
 	}
+
+	public Mono<MovieDetail> getLatestResponse() {
+		return handleErrors(
+				webClient.get()
+						.uri(uriBuilder -> uriBuilder
+								.path("/movie/latest")
+								.queryParam("api_key", apiKey)
+								.build())
+						.retrieve()
+						.bodyToMono(MovieDetail.class),
+				"Error fetching latest movie"
+		);
+	}
+
+	public Mono<MovieResponse> getTrendingResponse(String timeWindow, int page) {
+		return cacheResult("trending_" + timeWindow, page,
+				handleErrors(
+						webClient.get()
+								.uri(uriBuilder -> uriBuilder
+										.path("/trending/movie/{time_window}")
+										.queryParam("api_key", apiKey)
+										.queryParam("page", page)
+										.build(timeWindow))
+								.retrieve()
+								.bodyToMono(MovieResponse.class),
+						"Error fetching trending movies"
+				)
+		);
+	}
+
+	public Mono<GenreListResponse> getGenreList() {
+		return handleErrors(
+				webClient.get()
+						.uri(uriBuilder -> uriBuilder
+								.path("/genre/movie/list")
+								.queryParam("api_key", apiKey)
+								.build())
+						.retrieve()
+						.bodyToMono(GenreListResponse.class),
+				"Error fetching genre list"
+		);
+	}
+
+	public Mono<MovieResponse> getMoviesByGenre(int genreId, int page) {
+		return cacheResult("genre_" + genreId, page,
+				handleErrors(
+						webClient.get()
+								.uri(uriBuilder -> uriBuilder
+										.path("/discover/movie")
+										.queryParam("api_key", apiKey)
+										.queryParam("with_genres", genreId)
+										.queryParam("page", page)
+										.build())
+								.retrieve()
+								.bodyToMono(MovieResponse.class),
+						"Error fetching movies by genre"
+				)
+		);
+	}
 }

@@ -40,8 +40,10 @@ public class CacheConfig {
                 "images",
                 "similar",
                 "reviews",
+                "latest",
                 "keywords",
-                "videos"
+                "videos",
+                "trending"
         ));
 
         return cacheManager;

@@ -81,4 +81,29 @@ public class MovieController {
     public Mono<VideoResponse> getVideoResponse(@PathVariable int id){
         return tmdbService.getVideoResponse(id);
     }
+
+
+    @GetMapping(value = "/latest", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<MovieDetail> getLatestResponse() {
+        return tmdbService.getLatestResponse();
+    }
+
+
+    @GetMapping(value = "/trending", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<MovieResponse> getTrendingResponse(@RequestParam(defaultValue = "day") String timeWindow,
+                                                   @RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getTrendingResponse(timeWindow, page);
+    }
+
+    @GetMapping(value = "/genres", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<GenreListResponse> getGenreList() {
+        return tmdbService.getGenreList();
+    }
+
+    @GetMapping(value = "/genre", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<MovieResponse> getMoviesByGenre(@RequestParam int genreId,
+                                                @RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getMoviesByGenre(genreId, page);
+    }
+
 }
